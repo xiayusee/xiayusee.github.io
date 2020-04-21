@@ -1,184 +1,554 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<title>柱状图排序</title>
-		<style>
-			*{
-				margin: 0;
-				padding: 0;
-			}
-			.box{
-				position: relative;
-				width: 950px;
-				height: 330px;
-				margin: 20px auto;
-				border: 1px solid red;
-				list-style: none;
-			}
-			li{
-				position: absolute;
-				bottom: 0;
-				width: 50px;
-				height: 60px;
-				background-color: #16c116;
-			}
-			button{
-				margin-left: 50px;
-				width: 100px;
-				height: 30px;
-			}
-			.act{
-				background-color: brown;
-			}
-			.done{
-				background-color: #e7d210;
-			}
-		</style>
-	</head>
-	<body>
-		<ul class="box"></ul>
-		<button>生成柱状图</button>
-		<button>开始排序</button>
-		
-		<script type="text/javascript">
-			var box = document.getElementsByClassName("box")[0];
-			var btn1 = document.getElementsByTagName("button")[0];
-			var btn2 = document.getElementsByTagName("button")[1];
-			
-			// btn1.onclick = initLi;		// 生成按钮 添加事件
-			btn1.onclick = function (){
-				this.innerText = "重新生成";
-				initLi();
-			}
-			
-			// 排序功能上线
-			btn2.onclick = function (){
-				var lis = box.children;		// 获取li对象的数组
-				var i = 0;		// 每一圈的下标
-				var n = 0;		// 计圈器
-				var temp;
-				// 因为for循环太快,缓动动画跟不上,所有在此使用定时器模仿for循环
-				var timer = setInterval(function (){
-					if(lis[i].offsetHeight > lis[i+1].offsetHeight){
-						// 换位置		换left值,换节点位置   parentNode.insertBefore(a,b);
-						// child.parentNode.removeChild(child);
-						lis[i].parentNode.insertBefore(lis[i+1],lis[i]);
-						temp = lis[i+1].offsetLeft;
-						/* lis[i+1].style.left = lis[i].offsetLeft + "px";
-						lis[i].style.left = temp + "px"; */
-						
-						slowlyMove(lis[i+1],lis[i].offsetLeft);
-						slowlyMove(lis[i],temp);
-					}
-					i ++;		// 模仿循环中的 i++; 计数器
-					if(i === lis.length -1 - n){
-						lis[i].className = "done";
-						n ++;
-						i = 0;
-						console.log("第" + n +"圈跑完了");
-					}
-					if(n === lis.length - 1){
-						lis[0].className = "done";
-						// 所有的循环都已结束
-						console.log("all stop ...");
-						clearInterval(timer);
-					}
-				},1000)
-			}
-			
-			function slowlyMove(ele,target){
-				clearInterval(ele.timer);
-				addClass(ele,"act");
-				ele.timer = setInterval(function (){
-					var start = ele.offsetLeft;
-					var step = (target - start) / 10;
-					if(Math.abs(step) < 1){
-						step = step > 0 ? 1 : -1;
-					}
-					if(start === target) {
-						removeClass(ele,"act");
-						clearInterval(ele.timer);
-						return;
-					}
-					ele.style.left = start + step + "px";
-				},17)
-			}
-			
-			function addClass(ele){
-				var classStr = ele.getAttribute("class");
-				var oldArr;
-				if(!classStr){
-					oldArr = [];
-				}else{
-					oldArr = classStr.split(" ");
-				}
-				var index;
-				for(var i = 1; i < arguments.length; i ++){
-					index = oldArr.indexOf(arguments[i]);
-					if(index === -1 && (typeof arguments[i] === "string")){
-						oldArr.push(arguments[i]);
-					}
-				}
-				classStr = oldArr.join(" ");
-				ele.setAttribute("class",classStr);
-			}
-			
-			function removeClass(ele){
-				var classStr = ele.getAttribute("class");
-				if(!classStr){
-					return;
-				}
-				var oldArr = classStr.split(" ");
-				var index;
-				for(var i = 1; i < arguments.length; i ++){
-					index = oldArr.indexOf(arguments[i]);
-					if(index !== -1){
-						oldArr.splice(index,1);
-					}
-				}
-				classStr = oldArr.join(" ");
-				ele.setAttribute("class",classStr);
-			}
-			
-			/*
-				回忆: 冒泡排序
-				for(var j = 0; j < arr.length - 1; j ++){
-					for(var i = 0; i < arr.length - 1 - j; i ++){
-						if(arr[i] > arr[i+1]){
-							var temp = arr[i+1];
-							arr[i+1] = arr[i];
-							arr[i] = temp;
-						}
-					}					
-				}
-			*/
-			
-			
-			// 初始化li的函数
-			function initLi(){
-				// 1 - 10		1*29 - 10*28
-				// 随机范围 Math.floor(Math.random()*length + min) * 28
-				var hArr = [];
-				var str = "";
-				var l;
-				for(var i = 0; i < 10; i ++){
-					var h = Math.floor(Math.random()*10 + 1) * 28;
-					// 判断生成的 高度 时候已经存在,不存在添加,存在重来
-					if(hArr.indexOf(h) === -1){
-						hArr.push(h);
-					}else{
-						i --;
-					}
-				}
-				// <!-- <li style="left: xxxpx;height:xxxpx;"></li> -->
-				// 每个li的间距是 40  li的宽度是 50
-				for(var j = 0; j < hArr.length; j ++){
-					j === 0 ? l = 40 : l += 90;
-					str += '<li style="left: ' + l + 'px;height: ' + hArr[j] + 'px;"></li>';
-				}
-				box.innerHTML = str;
-			}
-		</script>
-	</body>
+<head>
+<meta charset='UTF-8'><meta name='viewport' content='width=device-width initial-scale=1'>
+<title>莉莉的燃脂计划</title><link href='https://fonts.loli.net/css?family=Open+Sans:400italic,700italic,700,400&subset=latin,latin-ext' rel='stylesheet' type='text/css' /><style type='text/css'>html {overflow-x: initial !important;}:root { --bg-color:#ffffff; --text-color:#333333; --select-text-bg-color:#B5D6FC; --select-text-font-color:auto; --monospace:"Lucida Console",Consolas,"Courier",monospace; }
+html { font-size: 14px; background-color: var(--bg-color); color: var(--text-color); font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+body { margin: 0px; padding: 0px; height: auto; bottom: 0px; top: 0px; left: 0px; right: 0px; font-size: 1rem; line-height: 1.42857; overflow-x: hidden; background: inherit; tab-size: 4; }
+iframe { margin: auto; }
+a.url { word-break: break-all; }
+a:active, a:hover { outline: 0px; }
+.in-text-selection, ::selection { text-shadow: none; background: var(--select-text-bg-color); color: var(--select-text-font-color); }
+#write { margin: 0px auto; height: auto; width: inherit; word-break: normal; overflow-wrap: break-word; position: relative; white-space: normal; overflow-x: visible; padding-top: 40px; }
+#write.first-line-indent p { text-indent: 2em; }
+#write.first-line-indent li p, #write.first-line-indent p * { text-indent: 0px; }
+#write.first-line-indent li { margin-left: 2em; }
+.for-image #write { padding-left: 8px; padding-right: 8px; }
+body.typora-export { padding-left: 30px; padding-right: 30px; }
+.typora-export .footnote-line, .typora-export li, .typora-export p { white-space: pre-wrap; }
+@media screen and (max-width: 500px) {
+  body.typora-export { padding-left: 0px; padding-right: 0px; }
+  #write { padding-left: 20px; padding-right: 20px; }
+  .CodeMirror-sizer { margin-left: 0px !important; }
+  .CodeMirror-gutters { display: none !important; }
+}
+#write li > figure:last-child { margin-bottom: 0.5rem; }
+#write ol, #write ul { position: relative; }
+img { max-width: 100%; vertical-align: middle; }
+button, input, select, textarea { color: inherit; font: inherit; }
+input[type="checkbox"], input[type="radio"] { line-height: normal; padding: 0px; }
+*, ::after, ::before { box-sizing: border-box; }
+#write h1, #write h2, #write h3, #write h4, #write h5, #write h6, #write p, #write pre { width: inherit; }
+#write h1, #write h2, #write h3, #write h4, #write h5, #write h6, #write p { position: relative; }
+p { line-height: inherit; }
+h1, h2, h3, h4, h5, h6 { break-after: avoid-page; break-inside: avoid; orphans: 2; }
+p { orphans: 4; }
+h1 { font-size: 2rem; }
+h2 { font-size: 1.8rem; }
+h3 { font-size: 1.6rem; }
+h4 { font-size: 1.4rem; }
+h5 { font-size: 1.2rem; }
+h6 { font-size: 1rem; }
+.md-math-block, .md-rawblock, h1, h2, h3, h4, h5, h6, p { margin-top: 1rem; margin-bottom: 1rem; }
+.hidden { display: none; }
+.md-blockmeta { color: rgb(204, 204, 204); font-weight: 700; font-style: italic; }
+a { cursor: pointer; }
+sup.md-footnote { padding: 2px 4px; background-color: rgba(238, 238, 238, 0.7); color: rgb(85, 85, 85); border-radius: 4px; cursor: pointer; }
+sup.md-footnote a, sup.md-footnote a:hover { color: inherit; text-transform: inherit; text-decoration: inherit; }
+#write input[type="checkbox"] { cursor: pointer; width: inherit; height: inherit; }
+figure { overflow-x: auto; margin: 1.2em 0px; max-width: calc(100% + 16px); padding: 0px; }
+figure > table { margin: 0px !important; }
+tr { break-inside: avoid; break-after: auto; }
+thead { display: table-header-group; }
+table { border-collapse: collapse; border-spacing: 0px; width: 100%; overflow: auto; break-inside: auto; text-align: left; }
+table.md-table td { min-width: 32px; }
+.CodeMirror-gutters { border-right: 0px; background-color: inherit; }
+.CodeMirror-linenumber { user-select: none; }
+.CodeMirror { text-align: left; }
+.CodeMirror-placeholder { opacity: 0.3; }
+.CodeMirror pre { padding: 0px 4px; }
+.CodeMirror-lines { padding: 0px; }
+div.hr:focus { cursor: none; }
+#write pre { white-space: pre-wrap; }
+#write.fences-no-line-wrapping pre { white-space: pre; }
+#write pre.ty-contain-cm { white-space: normal; }
+.CodeMirror-gutters { margin-right: 4px; }
+.md-fences { font-size: 0.9rem; display: block; break-inside: avoid; text-align: left; overflow: visible; white-space: pre; background: inherit; position: relative !important; }
+.md-diagram-panel { width: 100%; margin-top: 10px; text-align: center; padding-top: 0px; padding-bottom: 8px; overflow-x: auto; }
+#write .md-fences.mock-cm { white-space: pre-wrap; }
+.md-fences.md-fences-with-lineno { padding-left: 0px; }
+#write.fences-no-line-wrapping .md-fences.mock-cm { white-space: pre; overflow-x: auto; }
+.md-fences.mock-cm.md-fences-with-lineno { padding-left: 8px; }
+.CodeMirror-line, twitterwidget { break-inside: avoid; }
+.footnotes { opacity: 0.8; font-size: 0.9rem; margin-top: 1em; margin-bottom: 1em; }
+.footnotes + .footnotes { margin-top: 0px; }
+.md-reset { margin: 0px; padding: 0px; border: 0px; outline: 0px; vertical-align: top; background: 0px 0px; text-decoration: none; text-shadow: none; float: none; position: static; width: auto; height: auto; white-space: nowrap; cursor: inherit; -webkit-tap-highlight-color: transparent; line-height: normal; font-weight: 400; text-align: left; box-sizing: content-box; direction: ltr; }
+li div { padding-top: 0px; }
+blockquote { margin: 1rem 0px; }
+li .mathjax-block, li p { margin: 0.5rem 0px; }
+li { margin: 0px; position: relative; }
+blockquote > :last-child { margin-bottom: 0px; }
+blockquote > :first-child, li > :first-child { margin-top: 0px; }
+.footnotes-area { color: rgb(136, 136, 136); margin-top: 0.714rem; padding-bottom: 0.143rem; white-space: normal; }
+#write .footnote-line { white-space: pre-wrap; }
+@media print {
+  body, html { border: 1px solid transparent; height: 99%; break-after: avoid; break-before: avoid; }
+  #write { margin-top: 0px; padding-top: 0px; border-color: transparent !important; }
+  .typora-export * { -webkit-print-color-adjust: exact; }
+  html.blink-to-pdf { font-size: 13px; }
+  .typora-export #write { padding-left: 32px; padding-right: 32px; padding-bottom: 0px; break-after: avoid; }
+  .typora-export #write::after { height: 0px; }
+}
+.footnote-line { margin-top: 0.714em; font-size: 0.7em; }
+a img, img a { cursor: pointer; }
+pre.md-meta-block { font-size: 0.8rem; min-height: 0.8rem; white-space: pre-wrap; background: rgb(204, 204, 204); display: block; overflow-x: hidden; }
+p > .md-image:only-child:not(.md-img-error) img, p > img:only-child { display: block; margin: auto; }
+p > .md-image:only-child { display: inline-block; width: 100%; }
+#write .MathJax_Display { margin: 0.8em 0px 0px; }
+.md-math-block { width: 100%; }
+.md-math-block:not(:empty)::after { display: none; }
+[contenteditable="true"]:active, [contenteditable="true"]:focus, [contenteditable="false"]:active, [contenteditable="false"]:focus { outline: 0px; box-shadow: none; }
+.md-task-list-item { position: relative; list-style-type: none; }
+.task-list-item.md-task-list-item { padding-left: 0px; }
+.md-task-list-item > input { position: absolute; top: 0px; left: 0px; margin-left: -1.2em; margin-top: calc(1em - 10px); border: none; }
+.math { font-size: 1rem; }
+.md-toc { min-height: 3.58rem; position: relative; font-size: 0.9rem; border-radius: 10px; }
+.md-toc-content { position: relative; margin-left: 0px; }
+.md-toc-content::after, .md-toc::after { display: none; }
+.md-toc-item { display: block; color: rgb(65, 131, 196); }
+.md-toc-item a { text-decoration: none; }
+.md-toc-inner:hover { text-decoration: underline; }
+.md-toc-inner { display: inline-block; cursor: pointer; }
+.md-toc-h1 .md-toc-inner { margin-left: 0px; font-weight: 700; }
+.md-toc-h2 .md-toc-inner { margin-left: 2em; }
+.md-toc-h3 .md-toc-inner { margin-left: 4em; }
+.md-toc-h4 .md-toc-inner { margin-left: 6em; }
+.md-toc-h5 .md-toc-inner { margin-left: 8em; }
+.md-toc-h6 .md-toc-inner { margin-left: 10em; }
+@media screen and (max-width: 48em) {
+  .md-toc-h3 .md-toc-inner { margin-left: 3.5em; }
+  .md-toc-h4 .md-toc-inner { margin-left: 5em; }
+  .md-toc-h5 .md-toc-inner { margin-left: 6.5em; }
+  .md-toc-h6 .md-toc-inner { margin-left: 8em; }
+}
+a.md-toc-inner { font-size: inherit; font-style: inherit; font-weight: inherit; line-height: inherit; }
+.footnote-line a:not(.reversefootnote) { color: inherit; }
+.md-attr { display: none; }
+.md-fn-count::after { content: "."; }
+code, pre, samp, tt { font-family: var(--monospace); }
+kbd { margin: 0px 0.1em; padding: 0.1em 0.6em; font-size: 0.8em; color: rgb(36, 39, 41); background: rgb(255, 255, 255); border: 1px solid rgb(173, 179, 185); border-radius: 3px; box-shadow: rgba(12, 13, 14, 0.2) 0px 1px 0px, rgb(255, 255, 255) 0px 0px 0px 2px inset; white-space: nowrap; vertical-align: middle; }
+.md-comment { color: rgb(162, 127, 3); opacity: 0.8; font-family: var(--monospace); }
+code { text-align: left; vertical-align: initial; }
+a.md-print-anchor { white-space: pre !important; border-width: initial !important; border-style: none !important; border-color: initial !important; display: inline-block !important; position: absolute !important; width: 1px !important; right: 0px !important; outline: 0px !important; background: 0px 0px !important; text-decoration: initial !important; text-shadow: initial !important; }
+.md-inline-math .MathJax_SVG .noError { display: none !important; }
+.html-for-mac .inline-math-svg .MathJax_SVG { vertical-align: 0.2px; }
+.md-math-block .MathJax_SVG_Display { text-align: center; margin: 0px; position: relative; text-indent: 0px; max-width: none; max-height: none; min-height: 0px; min-width: 100%; width: auto; overflow-y: hidden; display: block !important; }
+.MathJax_SVG_Display, .md-inline-math .MathJax_SVG_Display { width: auto; margin: inherit; display: inline-block !important; }
+.MathJax_SVG .MJX-monospace { font-family: var(--monospace); }
+.MathJax_SVG .MJX-sans-serif { font-family: sans-serif; }
+.MathJax_SVG { display: inline; font-style: normal; font-weight: 400; line-height: normal; zoom: 90%; text-indent: 0px; text-align: left; text-transform: none; letter-spacing: normal; word-spacing: normal; overflow-wrap: normal; white-space: nowrap; float: none; direction: ltr; max-width: none; max-height: none; min-width: 0px; min-height: 0px; border: 0px; padding: 0px; margin: 0px; }
+.MathJax_SVG * { transition: none 0s ease 0s; }
+.MathJax_SVG_Display svg { vertical-align: middle !important; margin-bottom: 0px !important; margin-top: 0px !important; }
+.os-windows.monocolor-emoji .md-emoji { font-family: "Segoe UI Symbol", sans-serif; }
+.md-diagram-panel > svg { max-width: 100%; }
+[lang="flow"] svg, [lang="mermaid"] svg { max-width: 100%; height: auto; }
+[lang="mermaid"] .node text { font-size: 1rem; }
+table tr th { border-bottom: 0px; }
+video { max-width: 100%; display: block; margin: 0px auto; }
+iframe { max-width: 100%; width: 100%; border: none; }
+.highlight td, .highlight tr { border: 0px; }
+svg[id^="mermaidChart"] { line-height: 1em; }
+mark { background: rgb(255, 255, 0); color: rgb(0, 0, 0); }
+.md-html-inline .md-plain, .md-html-inline strong, mark .md-inline-math, mark strong { color: inherit; }
+mark .md-meta { color: rgb(0, 0, 0); opacity: 0.3 !important; }
+
+
+:root {
+    --side-bar-bg-color: #fafafa;
+    --control-text-color: #777;
+}
+
+@include-when-export url(https://fonts.loli.net/css?family=Open+Sans:400italic,700italic,700,400&subset=latin,latin-ext);
+
+html {
+    font-size: 16px;
+}
+
+body {
+    font-family: "Open Sans","Clear Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
+    color: rgb(51, 51, 51);
+    line-height: 1.6;
+}
+
+#write {
+    max-width: 860px;
+  	margin: 0 auto;
+  	padding: 30px;
+    padding-bottom: 100px;
+}
+#write > ul:first-child,
+#write > ol:first-child{
+    margin-top: 30px;
+}
+
+a {
+    color: #4183C4;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    position: relative;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    font-weight: bold;
+    line-height: 1.4;
+    cursor: text;
+}
+h1:hover a.anchor,
+h2:hover a.anchor,
+h3:hover a.anchor,
+h4:hover a.anchor,
+h5:hover a.anchor,
+h6:hover a.anchor {
+    text-decoration: none;
+}
+h1 tt,
+h1 code {
+    font-size: inherit;
+}
+h2 tt,
+h2 code {
+    font-size: inherit;
+}
+h3 tt,
+h3 code {
+    font-size: inherit;
+}
+h4 tt,
+h4 code {
+    font-size: inherit;
+}
+h5 tt,
+h5 code {
+    font-size: inherit;
+}
+h6 tt,
+h6 code {
+    font-size: inherit;
+}
+h1 {
+    padding-bottom: .3em;
+    font-size: 2.25em;
+    line-height: 1.2;
+    border-bottom: 1px solid #eee;
+}
+h2 {
+   padding-bottom: .3em;
+    font-size: 1.75em;
+    line-height: 1.225;
+    border-bottom: 1px solid #eee;
+}
+h3 {
+    font-size: 1.5em;
+    line-height: 1.43;
+}
+h4 {
+    font-size: 1.25em;
+}
+h5 {
+    font-size: 1em;
+}
+h6 {
+   font-size: 1em;
+    color: #777;
+}
+p,
+blockquote,
+ul,
+ol,
+dl,
+table{
+    margin: 0.8em 0;
+}
+li>ol,
+li>ul {
+    margin: 0 0;
+}
+hr {
+    height: 2px;
+    padding: 0;
+    margin: 16px 0;
+    background-color: #e7e7e7;
+    border: 0 none;
+    overflow: hidden;
+    box-sizing: content-box;
+}
+
+li p.first {
+    display: inline-block;
+}
+ul,
+ol {
+    padding-left: 30px;
+}
+ul:first-child,
+ol:first-child {
+    margin-top: 0;
+}
+ul:last-child,
+ol:last-child {
+    margin-bottom: 0;
+}
+blockquote {
+    border-left: 4px solid #dfe2e5;
+    padding: 0 15px;
+    color: #777777;
+}
+blockquote blockquote {
+    padding-right: 0;
+}
+table {
+    padding: 0;
+    word-break: initial;
+}
+table tr {
+    border-top: 1px solid #dfe2e5;
+    margin: 0;
+    padding: 0;
+}
+table tr:nth-child(2n),
+thead {
+    background-color: #f8f8f8;
+}
+table tr th {
+    font-weight: bold;
+    border: 1px solid #dfe2e5;
+    border-bottom: 0;
+    margin: 0;
+    padding: 6px 13px;
+}
+table tr td {
+    border: 1px solid #dfe2e5;
+    margin: 0;
+    padding: 6px 13px;
+}
+table tr th:first-child,
+table tr td:first-child {
+    margin-top: 0;
+}
+table tr th:last-child,
+table tr td:last-child {
+    margin-bottom: 0;
+}
+
+.CodeMirror-lines {
+    padding-left: 4px;
+}
+
+.code-tooltip {
+    box-shadow: 0 1px 1px 0 rgba(0,28,36,.3);
+    border-top: 1px solid #eef2f2;
+}
+
+.md-fences,
+code,
+tt {
+    border: 1px solid #e7eaed;
+    background-color: #f8f8f8;
+    border-radius: 3px;
+    padding: 0;
+    padding: 2px 4px 0px 4px;
+    font-size: 0.9em;
+}
+
+code {
+    background-color: #f3f4f4;
+    padding: 0 2px 0 2px;
+}
+
+.md-fences {
+    margin-bottom: 15px;
+    margin-top: 15px;
+    padding-top: 8px;
+    padding-bottom: 6px;
+}
+
+
+.md-task-list-item > input {
+  margin-left: -1.3em;
+}
+
+@media print {
+    html {
+        font-size: 13px;
+    }
+    table,
+    pre {
+        page-break-inside: avoid;
+    }
+    pre {
+        word-wrap: break-word;
+    }
+}
+
+.md-fences {
+	background-color: #f8f8f8;
+}
+#write pre.md-meta-block {
+	padding: 1rem;
+    font-size: 85%;
+    line-height: 1.45;
+    background-color: #f7f7f7;
+    border: 0;
+    border-radius: 3px;
+    color: #777777;
+    margin-top: 0 !important;
+}
+
+.mathjax-block>.code-tooltip {
+	bottom: .375rem;
+}
+
+.md-mathjax-midline {
+    background: #fafafa;
+}
+
+#write>h3.md-focus:before{
+	left: -1.5625rem;
+	top: .375rem;
+}
+#write>h4.md-focus:before{
+	left: -1.5625rem;
+	top: .285714286rem;
+}
+#write>h5.md-focus:before{
+	left: -1.5625rem;
+	top: .285714286rem;
+}
+#write>h6.md-focus:before{
+	left: -1.5625rem;
+	top: .285714286rem;
+}
+.md-image>.md-meta {
+    /*border: 1px solid #ddd;*/
+    border-radius: 3px;
+    padding: 2px 0px 0px 4px;
+    font-size: 0.9em;
+    color: inherit;
+}
+
+.md-tag {
+    color: #a7a7a7;
+    opacity: 1;
+}
+
+.md-toc { 
+    margin-top:20px;
+    padding-bottom:20px;
+}
+
+.sidebar-tabs {
+    border-bottom: none;
+}
+
+#typora-quick-open {
+    border: 1px solid #ddd;
+    background-color: #f8f8f8;
+}
+
+#typora-quick-open-item {
+    background-color: #FAFAFA;
+    border-color: #FEFEFE #e5e5e5 #e5e5e5 #eee;
+    border-style: solid;
+    border-width: 1px;
+}
+
+/** focus mode */
+.on-focus-mode blockquote {
+    border-left-color: rgba(85, 85, 85, 0.12);
+}
+
+header, .context-menu, .megamenu-content, footer{
+    font-family: "Segoe UI", "Arial", sans-serif;
+}
+
+.file-node-content:hover .file-node-icon,
+.file-node-content:hover .file-node-open-state{
+    visibility: visible;
+}
+
+.mac-seamless-mode #typora-sidebar {
+    background-color: #fafafa;
+    background-color: var(--side-bar-bg-color);
+}
+
+.md-lang {
+    color: #b4654d;
+}
+
+.html-for-mac .context-menu {
+    --item-hover-bg-color: #E6F0FE;
+}
+
+#md-notification .btn {
+    border: 0;
+}
+
+.dropdown-menu .divider {
+    border-color: #e5e5e5;
+}
+
+.ty-preferences .window-content {
+    background-color: #fafafa;
+}
+
+.ty-preferences .nav-group-item.active {
+    color: white;
+    background: #999;
+}
+
+
+</style>
+</head>
+<body class='typora-export os-windows' >
+<div  id='write'  class = 'is-node'><h1><a name="莉莉的燃脂计划" class="md-header-anchor"></a><span>莉莉的燃脂计划</span></h1><p><span>运动生理学家发现，运动量达到最大心率的 60% 时，身体开始大量消耗脂肪供能。当最大心率达到 75% 以上时，身体在消耗脂肪的同时开始消耗蛋白质（肌肉）供能。因此最大心率的 60% ~ 75%（称为目标心率或靶心率）即为有氧运动燃脂的最佳心率区间。</span></p><p><span>有氧运动最佳心率的计算方式一般有最高心率法（Maximal Heart Rate Method）和心率储备法（Heart Rate Reserve Method）两种。最高心率法简单易行，可以直接根据公式获得目标心率；而心率储备法则需要预先测量静息心率（静止心率），会提供更准确的数据。</span></p><p><span>测量静息心率：记录极度安静状态下 1 分钟内的脉搏跳动次数。测量的最佳时间是早晨起床之前。</span></p><p><span>莉莉的最大心率 = 220 - 年龄 = 220 - 29 = </span><strong><span>191</span></strong><span>次/分</span></p><p><span>最高心率法：莉莉有氧运动的最佳心率 =（最大心率）X（60% ~ 75%）= 191 * (0.6 ~ 0.75) = (</span><strong><span>115 ~ 143</span></strong><span>)次/分</span></p><p><span>心率储备法：有氧运动最佳心率 =（最大心率 - 静息心率）X（60% ~ 75%）+ 静息心率</span></p><h2><a name="1锻炼前--热身动作复用" class="md-header-anchor"></a><span>1.锻炼前--热身动作(复用)</span></h2><h3><a name="11颈旋转" class="md-header-anchor"></a><span>1.1颈旋转</span></h3><p><span>前后左右活动头部，拉动颈部肌肉。动作共需进行3组，每组10次，每组间允许有5~10秒的休息时间。</span>
+<img src="https://hiphotos.baidu.com/feed/pic/item/b7fd5266d0160924f795e161d80735fae6cd3413.jpg" referrerpolicy="no-referrer" alt="颈旋转"></p><h3><a name="12髋关节旋转" class="md-header-anchor"></a><span>1.2髋关节旋转</span></h3><p><span>身体上半部分前倾，腰部向下弯曲90度，身体起来，分别向左向右弯曲，拉伸。动作共需进行3组，每组10次，每组间允许有10~30秒的休息时间。</span>
+<img src="https://hiphotos.baidu.com/feed/pic/item/a8014c086e061d95940c744277f40ad162d9ca06.jpg" referrerpolicy="no-referrer" alt="髋关节旋转"></p><h3><a name="13高抬腿" class="md-header-anchor"></a><span>1.3高抬腿</span></h3><p><span>双脚交叉高抬腿。尽量抬高带自己的极限。动作共需进行3组，每组10次，每组间允许有10~30秒的休息时间。</span>
+<img src="https://hiphotos.baidu.com/feed/pic/item/a1ec08fa513d2697e9984b2759fbb2fb4316d805.jpg" referrerpolicy="no-referrer" alt="高抬腿"></p><h3><a name="14交替髂腰肌拉伸" class="md-header-anchor"></a><span>1.4交替髂腰肌拉伸</span></h3><p><span>脚部往右跨出成弓形步，双手举高。然后撤右脚回到原位，同时活动背部，双手抓地，臀部顺势向上翘起。动作共需进行3组，每组10次，每组间允许有10~30秒的休息时间。</span>
+<img src="https://hiphotos.baidu.com/feed/pic/item/f636afc379310a55cb4b9d8ebb4543a982261058.jpg" referrerpolicy="no-referrer"></p><h3><a name="15深蹲" class="md-header-anchor"></a><span>1.5深蹲</span></h3><p><span>该动作主要活动的是膝关节，做该动作时要注意身体不要向前倾斜，同时下蹲的动作以慢为主。动作共需进行3组，每组10次，每组间允许有10~30秒的休息时间。</span>
+<img src="https://hiphotos.baidu.com/feed/pic/item/ac345982b2b7d0a2e28247e7c7ef76094b369a05.jpg" referrerpolicy="no-referrer"></p><h3><a name="16拳击小碎步" class="md-header-anchor"></a><span>1.6拳击小碎步</span></h3><p><span>就像拳击手一样，双脚保持小碎步的跳跃，并同时向后点地。动作共需进行3组，每组10次，每组间允许有10~30秒的休息时间。</span>
+<img src="https://hiphotos.baidu.com/feed/pic/item/8b82b9014a90f603f0fbdf3d3512b31bb051ed05.jpg" referrerpolicy="no-referrer"></p><h3><a name="17躯干旋转" class="md-header-anchor"></a><span>1.7躯干旋转</span></h3><p><span>身体躯干以做俯卧撑的形式趴于地面，单手支撑身体，旋转躯干。动作共需进行3组，每组10次，每组间允许有10~30秒的休息时间。</span>
+<img src="https://hiphotos.baidu.com/feed/pic/item/adaf2edda3cc7cd97a8f77a33501213fb80e912e.jpg" referrerpolicy="no-referrer"></p><h3><a name="18原地侧弓步" class="md-header-anchor"></a><span>1.8原地侧弓步</span></h3><p><span>先身体站直，以一只脚为支撑点，向左或者向右迈出一步，身体顺势向迈出脚的地方压下去。动作共需进行3组，每组10次，每组间允许有10~30秒的休息时间。</span>
+<img src="https://hiphotos.baidu.com/feed/pic/item/dc54564e9258d109908ceac8dd58ccbf6c814d58.jpg" referrerpolicy="no-referrer"></p><h3><a name="19c字绕肩" class="md-header-anchor"></a><span>1.9C字绕肩</span></h3><p><span>身体站直，双臂伸展，指尖由高到低画一个C的动作。动作共需进行3组，每组10次，每组间允许有10~30秒的休息时间。</span>
+<img src="https://hiphotos.baidu.com/feed/pic/item/b999a9014c086e0680e37c310e087bf40ad1cb05.jpg" referrerpolicy="no-referrer"></p><h3><a name="110开合跳" class="md-header-anchor"></a><span>1.10开合跳</span></h3><p><span>做完上面的动作，这时，我们的身体已经达到了充分的预热准备。最后再来一个全身的交叉跳跃，就可以正式的进行健身了。动作共需进行3组，每组10次，每组间允许有10~30秒的休息时间。</span>
+<img src="https://hiphotos.baidu.com/feed/pic/item/8d5494eef01f3a29395596b49525bc315c607c2e.jpg" referrerpolicy="no-referrer"></p><h3><a name="111跑步专用热身动作" class="md-header-anchor"></a><span>1.11跑步专用热身动作</span></h3><h4><a name="1111原地热身跑之前后垫步" class="md-header-anchor"></a><span>1.11.1原地热身跑之前后垫步</span></h4><p><img src="http://5b0988e595225.cdn.sohucs.com/images/20190410/1703f48d3f98402e93a6e1fc58b3acf2.gif" referrerpolicy="no-referrer"></p><h4><a name="1112原地热身跑之垫步高抬腿" class="md-header-anchor"></a><span>1.11.2原地热身跑之垫步高抬腿</span></h4><p><img src="http://5b0988e595225.cdn.sohucs.com/images/20190410/00ee85e346244e418624d2d84a1ec56d.gif" referrerpolicy="no-referrer"></p><h4><a name="1113原地热身跑之左右垫步" class="md-header-anchor"></a><span>1.11.3原地热身跑之左右垫步</span></h4><p><img src="http://5b0988e595225.cdn.sohucs.com/images/20190410/511f68d7b93b4206a8aca9f64cd007cd.gif" referrerpolicy="no-referrer"></p><h4><a name="1114大腿前侧动态牵拉" class="md-header-anchor"></a><span>1.11.4大腿前侧动态牵拉</span></h4><p><img src="http://5b0988e595225.cdn.sohucs.com/images/20190410/6c808ba0606949feac41ac402a5b8cf0.gif" referrerpolicy="no-referrer"></p><h4><a name="1115大腿后侧动态牵拉" class="md-header-anchor"></a><span>1.11.5大腿后侧动态牵拉</span></h4><p><img src="http://5b0988e595225.cdn.sohucs.com/images/20190410/421499d208d54b4abf9f1b9640c5a548.gif" referrerpolicy="no-referrer"></p><h4><a name="1116臀肌动态牵拉1" class="md-header-anchor"></a><span>1.11.6臀肌动态牵拉1</span></h4><p><img src="http://5b0988e595225.cdn.sohucs.com/images/20190410/447be2bb77d248979c65bb1e2444a077.gif" referrerpolicy="no-referrer"></p><h4><a name="1117臀肌动态牵拉2" class="md-header-anchor"></a><span>1.11.7臀肌动态牵拉2</span></h4><p><img src="http://5b0988e595225.cdn.sohucs.com/images/20190410/fc8b0accb1094d01878019e50beda7aa.gif" referrerpolicy="no-referrer"></p><h4><a name="1118肌肉激活之弓箭步跳" class="md-header-anchor"></a><span>1.11.8肌肉激活之弓箭步跳</span></h4><p><img src="http://5b0988e595225.cdn.sohucs.com/images/20190410/ba11ba273e114462854bd51103a01833.gif" referrerpolicy="no-referrer"></p><h4><a name="1119肌肉激活之开合蹲跳" class="md-header-anchor"></a><span>1.11.9肌肉激活之开合蹲跳</span></h4><p><img src="http://5b0988e595225.cdn.sohucs.com/images/20190410/b9b5828faf1347abbce36a6b585773fa.gif" referrerpolicy="no-referrer"></p><h2><a name="2锻炼后--拉伸动作复用" class="md-header-anchor"></a><span>2.锻炼后--拉伸动作(复用)</span></h2><h3><a name="21颈部后仰拉伸" class="md-header-anchor"></a><span>2.1颈部后仰拉伸</span></h3><p><img src="http://5b0988e595225.cdn.sohucs.com/images/20181105/8d309e9a28104ba28bd37d1705038756.jpeg" referrerpolicy="no-referrer">
+<span>涉及肌肉：胸锁乳突肌</span></p><p><span>要点：手放在髋部，挺直背部，轻轻地抬头向上伸展。</span></p><h3><a name="22颈部左右侧拉伸" class="md-header-anchor"></a><span>2.2颈部左右侧拉伸</span></h3><p><img src="http://5b0988e595225.cdn.sohucs.com/images/20181105/2491c641a9734a899058546330e0e605.jpeg" referrerpolicy="no-referrer">
+<span>涉及肌肉：胸锁乳突肌和斜方肌上部</span></p><p><span>要点：坐立，身体立直，将头倾斜到左边，左侧练习后换右侧重复练习。</span></p><h3><a name="23婴儿式" class="md-header-anchor"></a><span>2.3婴儿式</span></h3><p><img src="http://5b0988e595225.cdn.sohucs.com/images/20181105/264d039bf2f245c2947414f22c608c41.jpeg" referrerpolicy="no-referrer">
+<span>涉及肌肉：背部肌肉</span></p><p><span>要点：跪立，双腿分开，臀部坐向脚后跟，身体向前，双手前伸，试图用额头触地。</span></p><h3><a name="24骆驼式" class="md-header-anchor"></a><span>2.4骆驼式</span></h3><p><img src="http://5b0988e595225.cdn.sohucs.com/images/20181105/30028012c7674e76b14c1fc886ddeb9b.jpeg" referrerpolicy="no-referrer">
+<span>涉及肌肉：腹直肌和腹外斜肌</span></p><p><span>要点：髋部缓慢向前推，稍微向上，双手握住双脚，注意不要过度挤压腰部。</span></p><h3><a name="25胸部拉伸" class="md-header-anchor"></a><span>2.5胸部拉伸</span></h3><p><img src="http://5b0988e595225.cdn.sohucs.com/images/20181105/0b215f46fdf14c8b9cfc712f24ca013a.jpeg" referrerpolicy="no-referrer">
+<span>涉及肌肉：背部、胸部最宽的肌肉。</span></p><p><span>要点：面对墙站立，右手推墙，身体慢慢地离开墙壁， 另一侧重复练习。</span></p><h3><a name="26广角式" class="md-header-anchor"></a><span>2.6广角式</span></h3><p><img src="http://5b0988e595225.cdn.sohucs.com/images/20181105/9745fc7cc9bd44bba96928b4f42bd8bd.jpeg" referrerpolicy="no-referrer">
+<span>涉及肌肉：内收肌、腘绳肌。</span></p><p><span>要点：坐在平地上，双腿缓慢伸直打开，不要弯曲膝盖，身体稍向前倾斜</span></p><h3><a name="27肩部拉伸" class="md-header-anchor"></a><span>2.7肩部拉伸</span></h3><p><img src="http://5b0988e595225.cdn.sohucs.com/images/20181105/f082b3b00acc4dbf95676136481c34a5.jpeg" referrerpolicy="no-referrer">
+<span>涉及肌肉：外侧三角肌。</span></p><p><span>要点：站立，左手臂伸直，右手轻轻按压以增加肌肉的伸展， 另右手重复练习。</span></p><h3><a name="28站立颈部伸展" class="md-header-anchor"></a><span>2.8站立颈部伸展</span></h3><p><img src="http://5b0988e595225.cdn.sohucs.com/images/20181105/9473ae9fb3304eeca5bc2780679df051.jpeg" referrerpolicy="no-referrer">
+<span>涉及肌肉：斜方肌。</span></p><p><span>要点：站立，双腿并拢，微微屈膝，手轻扶头部向前倾斜，下巴往胸部贴近。</span></p><h3><a name="29三角式" class="md-header-anchor"></a><span>2.9三角式</span></h3><p><img src="http://5b0988e595225.cdn.sohucs.com/images/20181105/3a20488802dd43ba82f7725a45a19556.jpeg" referrerpolicy="no-referrer">
+<span>涉及肌肉：腹外斜肌。</span></p><p><span>要点：左手放在站立腿前，腰背部挺直，右手抬起，让髋部从前向后打开。换对侧重复练习。</span></p><h3><a name="210上背拉伸" class="md-header-anchor"></a><span>2.10上背拉伸</span></h3><p><img src="http://5b0988e595225.cdn.sohucs.com/images/20181105/4547fa3bf9474c64a2930220a0686070.jpeg" referrerpolicy="no-referrer">
+<span>涉及肌肉：背部、胸部最宽的肌肉。</span></p><p><span>要点：靠墙一定距离站立，身体与地面平行。 尽量保持背部平坦，然后从胸部开始慢慢弯曲。</span></p><h3><a name="211仰卧脊柱扭转" class="md-header-anchor"></a><span>2.11仰卧脊柱扭转</span></h3><p><img src="http://5b0988e595225.cdn.sohucs.com/images/20181105/b3785576486c4ebc9bc1f22739fee99b.jpeg" referrerpolicy="no-referrer">
+<span>涉及肌肉：臀部和腹外斜肌。</span></p><p><span>要点：仰卧，屈右膝，身体向左扭转。对侧重复练习</span></p><h3><a name="212站立侧弯" class="md-header-anchor"></a><span>2.12站立侧弯</span></h3><p><img src="http://5b0988e595225.cdn.sohucs.com/images/20181105/e664960d81754c66980c6fe455da6fec.jpeg" referrerpolicy="no-referrer">
+<span>涉及肌肉：腹外斜肌和背部最宽的肌肉。</span></p><p><span>要点：站立，身体向右侧弯，重复左边的练习。</span></p><h3><a name="213单腿前屈式" class="md-header-anchor"></a><span>2.13单腿前屈式</span></h3><p><img src="http://5b0988e595225.cdn.sohucs.com/images/20181105/088ce8d9c3e94cc48469dde55219a96c.jpeg" referrerpolicy="no-referrer">
+<span>涉及肌肉：腘绳肌。</span></p><p><span>要点：站立，一只脚在前，背部挺直。 双手放在髋部，从髋部开始向前折叠，另一条腿重复。</span></p><h3><a name="214蝴蝶式" class="md-header-anchor"></a><span>2.14蝴蝶式</span></h3><p><img src="http://5b0988e595225.cdn.sohucs.com/images/20181105/b9a858e92bba4714bbcb43c561210476.jpeg" referrerpolicy="no-referrer">
+<span>涉及肌肉：内收肌。</span></p><p><span>要点：屈膝坐下来，脚底相对，背部平直，轻轻地将双手放在膝盖上，将臀部和膝盖向下靠近地面。</span></p><h3><a name="215怀抱婴儿式" class="md-header-anchor"></a><span>2.15怀抱婴儿式</span></h3><p><img src="http://5b0988e595225.cdn.sohucs.com/images/20181105/c6afdea59b5e4a2dba67872f53a382d5.jpeg" referrerpolicy="no-referrer">
+<span>涉及肌肉：髋屈肌。</span></p><p><span>要点：坐在地板上，挺直背部，慢慢地将一条腿拉到胸前，把大腿转出来，另一条腿重复。</span></p><h3><a name="216坐立鸽子式" class="md-header-anchor"></a><span>2.16坐立鸽子式</span></h3><p><img src="http://5b0988e595225.cdn.sohucs.com/images/20181105/fa4d397fdd4d458dab303bfc8f3b40dd.jpeg" referrerpolicy="no-referrer">
+<span>涉及肌肉：前胫骨</span></p><p><span>要点：坐在地板上，右手收回，用手握住右脚放在左膝上，左脚重复。</span></p><h3><a name="217前屈折叠式" class="md-header-anchor"></a><span>2.17前屈折叠式</span></h3><p><img src="http://5b0988e595225.cdn.sohucs.com/images/20181105/64f30970cfae466eb40bcacbe4e0b29a.jpeg" referrerpolicy="no-referrer">
+<span>涉及肌肉：腘绳肌和小腿肌肉。</span></p><p><span>要点：坐在地板上，双腿并拢伸直向前折叠。</span></p><h3><a name="218冲刺式" class="md-header-anchor"></a><span>2.18冲刺式</span></h3><p><img src="http://5b0988e595225.cdn.sohucs.com/images/20181105/48fdf1737d8a4ebd8291ad2ff4c83245.jpeg" referrerpolicy="no-referrer">
+<span>涉及肌肉：腰部肌肉和股四头肌。</span></p><p><span>要点：冲刺式，左腿在前屈膝90度。 抓住右脚向腰部，换另一侧重复。</span></p><h2><a name="mon星期一" class="md-header-anchor"></a><span>Mon.星期一</span></h2><h3><a name="mon1-热身5分钟" class="md-header-anchor"></a><span>Mon.1 热身5分钟</span></h3><ol start='' ><li><span>交替髂腰肌拉伸-每组15下-2组</span>
+<img src="https://hiphotos.baidu.com/feed/pic/item/f636afc379310a55cb4b9d8ebb4543a982261058.jpg" referrerpolicy="no-referrer"></li><li><span>原地侧弓步-每组15下-2组</span>
+<img src="https://hiphotos.baidu.com/feed/pic/item/dc54564e9258d109908ceac8dd58ccbf6c814d58.jpg" referrerpolicy="no-referrer"></li><li><span>原地热身跑之前后垫步-每组15下-2组</span>
+<img src="http://5b0988e595225.cdn.sohucs.com/images/20190410/1703f48d3f98402e93a6e1fc58b3acf2.gif" referrerpolicy="no-referrer"></li><li><span>大腿前侧动态牵拉-每组15下-2组</span>
+<img src="http://5b0988e595225.cdn.sohucs.com/images/20190410/6c808ba0606949feac41ac402a5b8cf0.gif" referrerpolicy="no-referrer"></li><li><span>大腿后侧动态牵拉-每组15下-2组</span>
+<img src="http://5b0988e595225.cdn.sohucs.com/images/20190410/421499d208d54b4abf9f1b9640c5a548.gif" referrerpolicy="no-referrer"></li></ol><h3><a name="mon2-跑步40分钟---全身性有氧运动" class="md-header-anchor"></a><span>Mon.2 跑步40分钟---全身性有氧运动</span></h3><p><img src="http://5b0988e595225.cdn.sohucs.com/images/20181023/9d1be2d7e89d4f649b49b98ae955c6a2.gif" referrerpolicy="no-referrer"></p><h3><a name="mon3-休息2分钟不可以坐下站着休息" class="md-header-anchor"></a><span>Mon.3 休息2分钟(不可以坐下,站着休息)</span></h3><h3><a name="mon4-开合跳每组20下3组--组间休息20秒不可以坐下站着休息" class="md-header-anchor"></a><span>Mon.4 开合跳每组20下</span><span>*</span><span>3组  组间休息20秒(不可以坐下,站着休息)</span></h3><p><img src="https://inews.gtimg.com/newsapp_match/0/9171497921/0" referrerpolicy="no-referrer">
+<span>全身性有氧运动</span></p><h3><a name="mon5-箭步蹲交替跳每组15下13组-组间休息15秒不可以坐下站着休息" class="md-header-anchor"></a><span>Mon.5 箭步蹲交替跳每组15下1</span><span>*</span><span>3组 组间休息15秒(不可以坐下,站着休息)</span></h3><p><img src="https://inews.gtimg.com/newsapp_match/0/9171495600/0" referrerpolicy="no-referrer">
+<span>主要锻炼肌群---大腿股四头肌</span></p><h3><a name="mon6-波比跳每组20下3组-组件休息20秒" class="md-header-anchor"></a><span>Mon.6 波比跳每组20下</span><span>*</span><span>3组 组件休息20秒</span></h3><p><img src="https://inews.gtimg.com/newsapp_match/0/9171492873/0" referrerpolicy="no-referrer">
+<span>全身性高强度有氧运动</span></p><h3><a name="mon7-拉伸5分钟" class="md-header-anchor"></a><span>Mon.7 拉伸5分钟</span></h3><ol start='' ><li><span>广角式</span>
+<img src="http://5b0988e595225.cdn.sohucs.com/images/20181105/9745fc7cc9bd44bba96928b4f42bd8bd.jpeg" referrerpolicy="no-referrer">
+<strong><span>要点：坐在平地上，双腿缓慢伸直打开，不要弯曲膝盖，身体稍向前倾斜</span></strong></li><li><span>单腿前屈式</span>
+<img src="http://5b0988e595225.cdn.sohucs.com/images/20181105/088ce8d9c3e94cc48469dde55219a96c.jpeg" referrerpolicy="no-referrer">
+<strong><span>要点：站立，一只脚在前，背部挺直。 双手放在髋部，从髋部开始向前折叠，另一条腿重复。</span></strong></li><li><span>前屈折叠式</span>
+<img src="http://5b0988e595225.cdn.sohucs.com/images/20181105/64f30970cfae466eb40bcacbe4e0b29a.jpeg" referrerpolicy="no-referrer">
+<strong><span>要点：坐在地板上，双腿并拢伸直向前折叠。</span></strong></li><li><span>婴儿式</span>
+<img src="http://5b0988e595225.cdn.sohucs.com/images/20181105/264d039bf2f245c2947414f22c608c41.jpeg" referrerpolicy="no-referrer">
+<strong><span>要点：跪立，双腿分开，臀部坐向脚后跟，身体向前，双手前伸，试图用额头触地。</span></strong></li><li><span>臀肌动态牵拉1</span>
+<img src="http://5b0988e595225.cdn.sohucs.com/images/20190410/447be2bb77d248979c65bb1e2444a077.gif" referrerpolicy="no-referrer"></li></ol><p>&nbsp;</p><h2><a name="tue星期二" class="md-header-anchor"></a><span>Tue.星期二</span></h2><h3><a name="tue1-休息" class="md-header-anchor"></a><span>Tue.1 休息</span></h3><h2><a name="wed星期三" class="md-header-anchor"></a><span>Wed.星期三</span></h2><h3><a name="wed1" class="md-header-anchor"></a><span>Wed.1</span></h3><h2><a name="thu星期四" class="md-header-anchor"></a><span>Thu.星期四</span></h2><h3><a name="thu1-休息" class="md-header-anchor"></a><span>Thu.1 休息</span></h3><h2><a name="fri星期五" class="md-header-anchor"></a><span>Fri.星期五</span></h2><h3><a name="fri1" class="md-header-anchor"></a><span>Fri.1 </span></h3><h2><a name="sat星期六" class="md-header-anchor"></a><span>Sat.星期六</span></h2><h3><a name="sat1-休息" class="md-header-anchor"></a><span>Sat.1 休息</span></h3><h2><a name="sun星期日" class="md-header-anchor"></a><span>Sun.星期日</span></h2><h3><a name="sun1" class="md-header-anchor"></a><span>Sun.1</span></h3></div>
+</body>
 </html>
