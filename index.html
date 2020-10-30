@@ -132,7 +132,7 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button style="width:100%" type="primary" @click="submitForm('form')" :loading="committing">{{committing ? '提交中' : '提交'}}</el-button>
+          <el-button style="width:100%" type="primary" @click="submitForm('form')">提交</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -140,8 +140,7 @@
     <script src="https://unpkg.com/element-ui/lib/index.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script type="text/javascript">
-      const BASE_API = 'http://192.168.198.232:6002';
-      let a = Date.now()
+      const BASE_API = 'http://192.168.5.115:6002';
       new Vue({
         el: '#app',
         data: function () {
@@ -213,7 +212,6 @@
             }, 1000)
           }
           return {
-            committing: false,
             form: {
               registerId: '1001',//挂号ID
               patientId: '10011001',//患者主键
@@ -558,28 +556,33 @@
         },
         mounted() {
           document.getElementsByClassName("app")[0].style.display = "block";
-          console.log(Date.now()-a)
         },
         methods: {
           submitForm(form) {
             this.$refs[form].validate((valid) => {
               if (valid) {
-                this.committing = true;
+                const loading = this.$loading({
+                  lock: true,
+                  text: '提交中,请等候',
+                  background: 'rgba(0, 0, 0, 0.7)'
+                });
                 axios.post( BASE_API + '/rnaTesting/rna-testing-add', {...this.form}).then((res)=>{
-                  if (res.data.code === '200') {
-                    this.committing = false;
-                    this.$message({
-                      type: "success",
-                      message: '提交成功'
+                  console.log(res)
+                  if (res.data.code == 200) {
+                    loading.close();
+                    this.$notify({
+                      title: '提交成功',
+                      message: '感谢您的提交',
+                      type: 'success'
                     });
-                    this.from = this.$options.data().from;
+                    this.$refs[form].resetFields();
                   } else {
-                    this.committing = false;
-                    this.$message.error(res.data.message || "提交失败");
+                    loading.close();
+                    this.$message.error(res.data.msg || "提交失败");
                   }
                 }).catch((err)=>{
-                  this.committing = false;
-                  this.$message.error(err.data.message || "提交异常");
+                  loading.close();
+                  this.$message.error(err.data.msg || "提交异常");
                 });
               } else {
                 return false;
