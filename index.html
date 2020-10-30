@@ -132,7 +132,7 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button style="width:100%" type="primary" @click="submitForm('form')">提交</el-button>
+          <el-button style="width:100%" type="primary" @click="submitForm('form')" :loading="committing">{{committing ? '提交中' : '提交'}}</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -213,6 +213,7 @@
             }, 1000)
           }
           return {
+            committing: false,
             form: {
               registerId: '1001',//挂号ID
               patientId: '10011001',//患者主键
@@ -242,18 +243,18 @@
                 { validator: checkAge, trigger: 'blur' }],
               patientPhone: [
                 { required: true, message: '请输入电话号码，不可为空', trigger: 'blur' },
-                { pattern: /^1[3578]\d{9}$/, message: '目前只支持中国大陆的手机号码', trigger: 'blur' },
+                { pattern: /^1[3578]\d{9}$/, message: '请输入正确的手机号码,目前只支持中国大陆的手机号码', trigger: 'blur' },
               ],
-              patientSex: [{ required: true, message: '请输入性别，不可为空', trigger: 'blur' }],
-              nationality: [{ required: true, message: '请输入国籍，不可为空', trigger: 'blur' }],
+              patientSex: [{ required: true, message: '请选择性别，不可为空', trigger: 'change' }],
+              nationality: [{ required: true, message: '请选择国籍，不可为空', trigger: 'change' }],
               certificateType: [
-                { required: true, message: '请输入证件类型，不可为空', trigger: ['change,blur'] },
+                { required: true, message: '请选择证件类型，不可为空', trigger: 'change' },
               ],
               certificateNum: [
                 { required: true, message: '请输入证件号码，不可为空', trigger: ['blur,change'] },
                 { validator: checkCertificateNum, trigger: 'blur' },
               ],
-              personSource: [{ required: true, message: '请选择人员来源，不可为空', trigger: ['change,blur'] }],
+              personSource: [{ required: true, message: '请选择人员来源，不可为空', trigger: 'change' }],
               fgEntry: [{ required: true, message: '是否为14天内境外入境人员', trigger: 'change' }],
               insureType: [{ required: true, message: '请选择参保类型，不可为空', trigger: 'change' }],
               takeSampleTime: [{ required: true, message: '请选择采样时间，不可为空', trigger: 'change' }],
@@ -563,17 +564,21 @@
           submitForm(form) {
             this.$refs[form].validate((valid) => {
               if (valid) {
+                this.committing = true;
                 axios.post( BASE_API + '/rnaTesting/rna-testing-add', {...this.form}).then((res)=>{
                   if (res.data.code === '200') {
+                    this.committing = false;
                     this.$message({
                       type: "success",
                       message: '提交成功'
                     });
                     this.from = this.$options.data().from;
                   } else {
+                    this.committing = false;
                     this.$message.error(res.data.message || "提交失败");
                   }
                 }).catch((err)=>{
+                  this.committing = false;
                   this.$message.error(err.data.message || "提交异常");
                 });
               } else {
