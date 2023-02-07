@@ -1,600 +1,236 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>预检分诊单</title>
-    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
-    <style>
-      .title {
-        color: rgb(25, 161, 247);
-        text-align: center;
-      }
-      .placeholder {
-        margin-top: 20px;
-      }
-      .borderTop {
-        border-top: #ffffff;
-      }
-      .box {
-        width: 100%;
-        height: 100%;
-        position: relative;
-        border: 1px solid rgba(187, 187, 187, 0.5);
-        border-radius: 5px;
-        box-sizing: border-box;
-      }
-      .box .inner {
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
-        margin-left: 10px;
-      }
-    </style>
-  </head>
-  <body class="app" style="display: none;">
-    <div id="app">
-      <h3 class="title">预检分诊单</h3>
-      <span class="placeholder">请各位根据真实情况填写如下内容</span>
-      <hr size="1" noshade="noshade" style="border:1px #cccccc dotted;margin-top: 20px">
-      <el-form ref="form" :model="form" :rules="rules" label-width="100px" label-position="top" class="demo-dynamic">
-        <el-form-item label="1.姓名" prop="patientName">
-          <el-input v-model="form.patientName"></el-input>
-        </el-form-item>
-        <el-form-item label="2.年龄" prop="patientAge">
-          <el-input v-model.number="form.patientAge"></el-input>
-        </el-form-item>
-        <el-form-item label="3.联系手机" prop="patientPhone">
-          <el-input v-model="form.patientPhone"></el-input>
-        </el-form-item>
-        <el-form-item label="4.性别" prop="patientSex">
-          <div class="box" @click="commonChoose('patientSex','0')">
-            <div class="inner">
-              <el-radio v-model="form.patientSex" label="0">女</el-radio>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!-- saved from url=(0027)http://itzoo.info/love.html -->
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Love</title>
+        
+        <script type="text/javascript" src="./js/jquery.min.js"></script>
+        <script type="text/javascript" src="./js/jscex.min.js"></script>
+        <script type="text/javascript" src="./js/jscex-parser.js"></script>
+        <script type="text/javascript" src="./js/jscex-jit.js"></script>
+        <script type="text/javascript" src="./js/jscex-builderbase.min.js"></script>
+        <script type="text/javascript" src="./js/jscex-async.min.js"></script>
+        <script type="text/javascript" src="./js/jscex-async-powerpack.min.js"></script>
+        <script type="text/javascript" src="./js/functions.js" charset="utf-8"></script>
+        <script type="text/javascript" src="./js/love.js" charset="utf-8"></script>
+        <style>
+          body{margin:0;padding:0;background:#ffe;font-size:14px;font-family:'微软雅黑','宋体',sans-serif;color:#231F20;overflow:auto}
+          a {color:#000;font-size:14px;}
+          #main{width:100%;}
+          #wrap{position:relative;margin:0 auto;width:1100px;height:680px;margin-top:10px;}
+          #text{width:400px;height:425px;left:60px;top:80px;position:absolute;}
+          #code{display:none;font-size:16px;}
+          #clock-box {position:absolute;left:60px;top:550px;font-size:28px;display:none;}
+          #clock-box a {font-size:28px;text-decoration:none;}
+          #clock{margin-left:48px;}
+          #clock .digit {font-size:64px;}
+          #canvas{margin:0 auto;width:1100px;height:680px;}
+          #error{margin:0 auto;text-align:center;margin-top:60px;display:none;}
+          .hand{cursor:pointer;}
+          .say{margin-left:5px;}
+          .space{margin-right:150px;}
+        </style>
+    </head>
+    <body>
+        <div id="main">
+            <div id="error">亲，您使用的浏览器无法支持即将显示的内容，请换成谷歌(<a href="http://www.google.cn/chrome/intl/zh-CN/landing_chrome.html?hl=zh-CN&brand=CHMI">Chrome</a>)或者火狐(<a href="http://firefox.com.cn/download/">Firefox</a>)浏览器哟~</div>
+            <div id="wrap">
+              <div id="text">
+                    <div id="code">                 
+                    <span class="say">不是在最好的时光遇见了你，</span><br>
+                    <span class="say">而是因为有你在，</span><br>
+                    <span class="say">我才有了最好的时光。</span><br>
+                    <span class="say">(๑′ᴗ‵๑)Ｉ Lᵒᵛᵉᵧₒᵤ❤</span><br>
+                    <span class="say">宝宝，宝宝，宝宝，宝宝，宝宝，宝宝，宝宝，宝宝，</span><br>
+                    <span class="say">宝宝，宝宝，宝宝，宝宝，宝宝，宝宝，宝宝，宝宝，</span><br>
+                    <span class="say">宝宝，宝宝，宝宝，宝宝，宝宝，宝宝，宝宝，宝宝，</span><br>
+                    <span class="say">宝宝，宝宝，宝宝，宝宝，宝宝，宝宝，宝宝，宝宝，</span><br>
+                    <span class="say">宝宝，宝宝，宝宝，宝宝，宝宝，宝宝，宝宝，宝宝，</span><br>
+                    <span class="say">宝宝，宝宝，宝宝，宝宝，宝宝，宝宝，宝宝，宝宝，</span><br>
+                    <span class="say">宝宝，宝宝，宝宝，宝宝，宝宝，宝宝，宝宝，宝宝，</span><br>
+                    <span class="say">宝宝，宝宝，宝宝，宝宝，宝宝，宝宝，宝宝，宝宝，</span><br>
+                    <br>
+                    <span class="say">宝宝，宝宝，宝宝，宝宝，宝宝，宝宝，宝宝，宝宝，</span><br>
+                    <span class="say">宝宝，宝宝，宝宝，宝宝，宝宝，宝宝，宝宝，宝宝，</span><br>
+                    <span class="say">宝宝，宝宝，宝宝，宝宝，宝宝，宝宝，宝宝，宝宝，</span><br>
+                    <span class="say">宝宝，宝宝，宝宝，宝宝，宝宝，宝宝，宝宝，宝宝，</span><br>
+                    <span class="say">宝宝，宝宝，宝宝，宝宝，宝宝，宝宝，宝宝，宝宝，</span><br>
+                    <span class="say">宝宝，宝宝，宝宝，宝宝，宝宝，宝宝，宝宝，宝宝。</span><br>
+                    <br>
+                    <span class="say" style="float: right;"> -- 爱你的哥哥.</span>
+                    </div>
+                </div>
+                <div id="clock-box">
+                    <a>夏宇</a> 与 <a>宝宝</a> 在一起的
+                        <div id="clock"></div>
+                </div>
+                <canvas id="canvas" width="1100" height="680"></canvas>
             </div>
-          </div>
-          <div class="box" style="border-top: #ffffff" @click="commonChoose('patientSex','1')">
-            <div class="inner">
-              <el-radio v-model="form.patientSex" label="1">男</el-radio>
-            </div>
-          </div>
-        </el-form-item>
-        <el-form-item label="5.国籍" prop="nationality">
-          <el-select placeholder="请选择国籍" v-model="form.nationality" style="width:100%">
-            <el-option-group v-for="group in country" :key="group.label" :label="group.label">
-              <el-option v-for="item in group.options" :key="item.value" :label="item.label" :value="item.label">
-                <span style="float: left;">{{ item.label }}</span>
-                <span style="float: right;">{{ item.value }}</span>
-              </el-option>
-            </el-option-group>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="6.户籍地" prop="domicile">
-          <el-input v-model="form.domicile"></el-input>
-        </el-form-item>
-        <el-form-item label="7.居住地址(详细到门牌号，例如：梅花豪庭1-1-101)" prop="address">
-          <el-input v-model="form.address"></el-input>
-        </el-form-item>
-        <el-form-item label="8.证件类型" prop="certificateType">
-          <el-select v-model="form.certificateType" placeholder="请选择" style="width:100%">
-            <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="9.证件号码" prop="certificateNum">
-          <el-input v-model="form.certificateNum"></el-input>
-        </el-form-item>
-        <el-form-item label="10.人员来源" prop="personSource">
-          <el-select v-model="form.personSource" placeholder="请选择" style="width:100%">
-            <el-option v-for="item in personSource" :key="item.value" :label="item.label" :value="item.value">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="11.14天内境外入境人员(采样时判定)" prop="fgEntry">
-            <div class="box" @click="commonChoose('fgEntry','0')">
-              <div class="inner">
-                <el-radio v-model="form.fgEntry" label="0">否</el-radio>
-              </div>
-            </div>
-            <div class="box" style="border-top: #ffffff" @click="commonChoose('fgEntry','1')">
-              <div class="inner">
-                <el-radio v-model="form.fgEntry" label="1">是</el-radio>
-              </div>
-            </div>
-        </el-form-item>
-        <el-form-item label="12.参保类型" prop="insureType">
-          <el-select v-model="form.insureType" placeholder="请选择" style="width:100%">
-            <el-option v-for="item in insureType" :key="item.value" :label="item.label" :value="item.value">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="13.参保地" prop="insurePlace">
-          <el-input v-model="form.insurePlace"></el-input>
-        </el-form-item>
-        <el-form-item label="14.险种" prop="insuranceTypes">
-          <el-select v-model="form.insuranceTypes" placeholder="请选择" style="width:100%">
-            <el-option v-for="item in insuranceTypes" :key="item.value" :label="item.label" :value="item.value">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="15.采样机构名称(如果采样机构为本机构，不需要填写)" prop="takeSampleOrg">
-          <el-input v-model="form.takeSampleOrg"></el-input>
-        </el-form-item>
-        <el-form-item label="16.采样时间" prop="takeSampleTime">
-          <el-date-picker style="width:100%" v-model="form.takeSampleTime" type="datetime" placeholder="选择日期时间"
-            :picker-options="pickerOptions"></el-date-picker>
-        </el-form-item>
-        <el-form-item label="17.标本类型" prop="specimenType">
-          <el-select v-model="form.specimenType" placeholder="请选择" style="width:100%">
-            <el-option v-for="item in specimenType" :key="item.value" :label="item.label" :value="item.value">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item>
-          <el-button style="width:100%" type="primary" @click="submitForm('form')">提交</el-button>
-        </el-form-item>
-      </el-form>
-    </div>
-    <script src="https://unpkg.com/vue/dist/vue.min.js"></script>
-    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script type="text/javascript">
-      const BASE_API = 'http://192.168.5.115:6002';
-      new Vue({
-        el: '#app',
-        data: function () {
-          const checkAge = (rule, value, callback) => {
-            if (!value) {
-              return callback();
-            }
-            setTimeout(() => {
-              if (!Number.isInteger(value)) {
-                callback(new Error('请输入整数'));
-              } else {
-                if (Number(value) > 120) {
-                  callback(new Error('请输入1-120的数字'));
-                } else {
-                  callback();
-                }
-              }
-            }, 1000);
-          };
-          const checkCertificateNum = (rule, value, callback) => {
-            if (!value) {
-              return callback(new Error("请输入证件号码，不可为空"));
-            }
-            setTimeout(() => {
-              if (this.form.certificateType == "0") {
-                let reg = /^[1-9]\d{5}(18|19|20|(3\d))\d{2}((0[1-9])|(1[0-2]))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/;
-                if (!reg.test(value)) {
-                  callback(new Error("请输入正确的证件号码"));
-                } else {
-                  callback();
-                }
-              } else if (this.form.certificateType == "2") {
-                let reg = /^[HM](\d{10}|\d{8})$/;
-                if (!reg.test(value)) {
-                  callback(new Error("请输入正确的回乡证"));
-                } else {
-                  callback();
-                }
-              } else if (this.form.certificateType == "3") {
-                let reg = /^\d{8}$/;
-                if (!reg.test(value)) {
-                  callback(new Error("请输入正确的台胞证"));
-                } else {
-                  callback();
-                }
-              } else {
-                return callback()
-              }
-            }, 1000)
-          };
-          const checkSpecimenType = (rule, value, callback) => {
-            if (!value) {
-              return callback(new Error('请输入标本类型，不可为空'))
-            }
-            setTimeout(() => {
-              if (value == "3") {
-                this.form.testItem = "1";
-              }
-            }, 1000)
-          };
-          const checkTestItem = (rule, value, callback) => {
-            if (!value) {
-              return callback(new Error("请输入检测项目，不可为空"))
-            }
-            setTimeout(() => {
-              if (value == '0' && this.form.specimenType == '3') {
-                callback(new Error('标本类型为血液，检测项目必须为IgG抗体检测'))
-              }
-            }, 1000)
-          }
-          return {
-            form: {
-              registerId: '1001',//挂号ID
-              patientId: '10011001',//患者主键
-              patientName: '',//姓名
-              patientAge: '',//年龄
-              patientPhone: '',//联系手机
-              patientSex: '',//性别
-              nationality: '',//国籍
-              domicile: '',//户籍地
-              address: '',//居住地址
-              certificateType: '',//证件类型
-              certificateNum: '',//证件号码
-              personSource: '',//人员来源
-              // personnelIdentity:'',//人员身份
-              fgEntry: '',//14天内境外入境人员
-              insureType: '',//参保类型
-              insurePlace: '',//参保地
-              insuranceTypes: '',//险种
-              takeSampleOrg: '',//采样机构名称
-              takeSampleTime: new Date(),//采样时间
-              specimenType: '',//标本类型
-            },
-            rules: {
-              patientName: [{ required: true, message: '请输入姓名,不可为空', trigger: 'blur' }],
-              patientAge: [
-                { required: false, trigger: 'blur' },
-                { validator: checkAge, trigger: 'blur' }],
-              patientPhone: [
-                { required: true, message: '请输入电话号码，不可为空', trigger: 'blur' },
-                { pattern: /^1[3578]\d{9}$/, message: '请输入正确的手机号码,目前只支持中国大陆的手机号码', trigger: 'blur' },
-              ],
-              patientSex: [{ required: true, message: '请选择性别，不可为空', trigger: 'change' }],
-              nationality: [{ required: true, message: '请选择国籍，不可为空', trigger: 'change' }],
-              certificateType: [
-                { required: true, message: '请选择证件类型，不可为空', trigger: 'change' },
-              ],
-              certificateNum: [
-                { required: true, message: '请输入证件号码，不可为空', trigger: ['blur,change'] },
-                { validator: checkCertificateNum, trigger: 'blur' },
-              ],
-              personSource: [{ required: true, message: '请选择人员来源，不可为空', trigger: 'change' }],
-              fgEntry: [{ required: true, message: '是否为14天内境外入境人员', trigger: 'change' }],
-              insureType: [{ required: true, message: '请选择参保类型，不可为空', trigger: 'change' }],
-              takeSampleTime: [{ required: true, message: '请选择采样时间，不可为空', trigger: 'change' }],
-              specimenType: [
-                { required: true, message: '请选择标本类型，不可为空', trigger: 'change' },
-              ],
-            },
-            pickerOptions: {
-              disabledDate(time) {
-                return time.getTime() > Date.now();
-              }
-            },
-            country: [
-              {
-                label: '所有国家',
-                options: [
-                  { value: 'China', label: '中国' },
-                  { value: 'Angola', label: '安哥拉' },
-                  { value: 'Afghanistan', label: '阿富汗' },
-                  { value: 'Albania', label: '阿尔巴尼亚' },
-                  { value: 'Algeria', label: '阿尔及利亚' },
-                  { value: 'Andorra', label: '安道尔共和国' },
-                  { value: 'Anguilla', label: '安圭拉岛' },
-                  { value: 'Antigua and Barbuda', label: '安提瓜和巴布达' },
-                  { value: 'Argentina', label: '阿根廷' },
-                  { value: 'Armenia', label: '亚美尼亚' },
-                  { value: 'Ascension', label: '阿森松' },
-                  { value: 'Australia', label: '澳大利亚' },
-                  { value: 'Austria', label: '奥地利' },
-                  { value: 'Azerbaijan', label: '阿塞拜疆' },
-                  { value: 'Bahamas', label: '巴哈马' },
-                  { value: 'Bahrain', label: '巴林' },
-                  { value: 'Bangladesh', label: '孟加拉国' },
-                  { value: 'Barbados', label: '巴巴多斯' },
-                  { value: 'Belarus', label: '白俄罗斯' },
-                  { value: 'Belgium', label: '比利时' },
-                  { value: 'Belize', label: '伯利兹' },
-                  { value: 'Benin', label: '贝宁' },
-                  { value: 'Bermuda Is', label: '百慕大群岛' },
-                  { value: 'Bolivia', label: '玻利维亚' },
-                  { value: 'Botswana', label: '博茨瓦纳' },
-                  { value: 'Brazil', label: '巴西' },
-                  { value: 'Brunei', label: '文莱' },
-                  { value: 'Bulgaria', label: '保加利亚' },
-                  { value: 'Burkina Faso', label: '布基纳法索' },
-                  { value: 'Burma', label: '缅甸' },
-                  { value: 'Burundi', label: '布隆迪' },
-                  { value: 'Cameroon', label: '喀麦隆' },
-                  { value: 'Canada', label: '加拿大' },
-                  { value: 'Cayman Is', label: '开曼群岛' },
-                  { value: 'Central African Republic', label: '中非共和国' },
-                  { value: 'Chad', label: '乍得' },
-                  { value: 'Chile', label: '智利' },
-                  { value: 'Colombia', label: '哥伦比亚' },
-                  { value: 'Congo', label: '刚果' },
-                  { value: 'Cook Is', label: '库克群岛' },
-                  { value: 'Costa Rica', label: '哥斯达黎加' },
-                  { value: 'Cuba', label: '古巴' },
-                  { value: 'Cyprus', label: '塞浦路斯' },
-                  { value: 'Czech Republic', label: '捷克' },
-                  { value: 'Denmark', label: '丹麦' },
-                  { value: 'Djibouti', label: '吉布提' },
-                  { value: 'Dominica Rep', label: '多米尼加共和国' },
-                  { value: 'Ecuador', label: '厄瓜多尔' },
-                  { value: 'Egypt', label: '埃及' },
-                  { value: 'EI Salvador', label: '萨尔瓦多' },
-                  { value: 'Estonia', label: '爱沙尼亚' },
-                  { value: 'Ethiopia', label: '埃塞俄比亚' },
-                  { value: 'Fiji', label: '斐济' },
-                  { value: 'Finland', label: '芬兰' },
-                  { value: 'France', label: '法国' },
-                  { value: 'French Guiana', label: '法属圭亚那' },
-                  { value: 'French Polynesia', label: '法属玻利尼西亚' },
-                  { value: 'Gabon', label: '加蓬' },
-                  { value: 'Gambia', label: '冈比亚' },
-                  { value: 'Georgia', label: '格鲁吉亚' },
-                  { value: 'Germany', label: '德国' },
-                  { value: 'Ghana', label: '加纳' },
-                  { value: 'Gibraltar', label: '直布罗陀' },
-                  { value: 'Greece', label: '希腊' },
-                  { value: 'Grenada', label: '格林纳达' },
-                  { value: 'Guam', label: '关岛' },
-                  { value: 'Guatemala', label: '危地马拉' },
-                  { value: 'Guinea', label: '几内亚' },
-                  { value: 'Guyana', label: '圭亚那' },
-                  { value: 'Haiti', label: '海地' },
-                  { value: 'Honduras', label: '洪都拉斯' },
-                  { value: 'Hungary', label: '匈牙利' },
-                  { value: 'Iceland', label: '冰岛' },
-                  { value: 'India', label: '印度' },
-                  { value: 'Indonesia', label: '印度尼西亚' },
-                  { value: 'Iran', label: '伊朗' },
-                  { value: 'Iraq', label: '伊拉克' },
-                  { value: 'Ireland', label: '爱尔兰' },
-                  { value: 'Israel', label: '以色列' },
-                  { value: 'Italy', label: '意大利' },
-                  { value: 'Ivory Coast', label: '科特迪瓦' },
-                  { value: 'Jamaica', label: '牙买加' },
-                  { value: 'Japan', label: '日本' },
-                  { value: 'Jordan', label: '约旦' },
-                  { value: 'Kampuchea (Cambodia )', label: '柬埔寨' },
-                  { value: 'Kazakstan', label: '哈萨克斯坦' },
-                  { value: 'Kenya', label: '肯尼亚' },
-                  { value: 'Korea', label: '韩国' },
-                  { value: 'Kuwait', label: '科威特' },
-                  { value: 'Kyrgyzstan', label: '吉尔吉斯坦' },
-                  { value: 'Laos', label: '老挝' },
-                  { value: 'Latvia', label: '拉脱维亚' },
-                  { value: 'Lebanon', label: '黎巴嫩' },
-                  { value: 'Lesotho', label: '莱索托' },
-                  { value: 'Liberia', label: '利比里亚' },
-                  { value: 'Libya', label: '利比亚' },
-                  { value: 'Liechtenstein', label: '列支敦士登' },
-                  { value: 'Lithuania', label: '立陶宛' },
-                  { value: 'Luxembourg', label: '卢森堡' },
-                  { value: 'Madagascar', label: '马达加斯加' },
-                  { value: 'Malawi', label: '马拉维' },
-                  { value: 'Malaysia', label: '马来西亚' },
-                  { value: 'Maldives', label: '马尔代夫' },
-                  { value: 'Mali', label: '马里' },
-                  { value: 'Malta', label: '马耳他' },
-                  { value: 'Mariana Is', label: '马里亚那群岛' },
-                  { value: 'Martinique', label: '马提尼克' },
-                  { value: 'Mauritius', label: '毛里求斯' },
-                  { value: 'Mexico', label: '墨西哥' },
-                  { value: 'Moldova', label: '摩尔多瓦' },
-                  { value: 'Monaco', label: '摩纳哥' },
-                  { value: 'Mongolia', label: '蒙古' },
-                  { value: 'Montserrat Is', label: '蒙特塞拉特岛' },
-                  { value: 'Morocco', label: '摩洛哥' },
-                  { value: 'Mozambique', label: '莫桑比克' },
-                  { value: 'Namibia', label: '纳米比亚' },
-                  { value: 'Nauru', label: '瑙鲁' },
-                  { value: 'Nepal', label: '尼泊尔' },
-                  { value: 'Netheriands Antilles', label: '荷属安的列斯' },
-                  { value: 'Netherlands', label: '荷兰' },
-                  { value: 'New Zealand', label: '新西兰' },
-                  { value: 'Nicaragua', label: '尼加拉瓜' },
-                  { value: 'Niger', label: '尼日尔' },
-                  { value: 'Nigeria', label: '尼日利亚' },
-                  { value: 'North Korea', label: '朝鲜' },
-                  { value: 'Norway', label: '挪威' },
-                  { value: 'Oman', label: '阿曼' },
-                  { value: 'Pakistan', label: '巴基斯坦' },
-                  { value: 'Panama', label: '巴拿马' },
-                  { value: 'Papua New Cuinea', label: '巴布亚新几内亚' },
-                  { value: 'Paraguay', label: '巴拉圭' },
-                  { value: 'Peru', label: '秘鲁' },
-                  { value: 'Philippines', label: '菲律宾' },
-                  { value: 'Poland', label: '波兰' },
-                  { value: 'Portugal', label: '葡萄牙' },
-                  { value: 'Puerto Rico', label: '波多黎各' },
-                  { value: 'Qatar', label: '卡塔尔' },
-                  { value: 'Reunion', label: '留尼旺' },
-                  { value: 'Romania', label: '罗马尼亚' },
-                  { value: 'Russia', label: '俄罗斯' },
-                  { value: 'Saint Lueia', label: '圣卢西亚' },
-                  { value: 'Saint Vincent', label: '圣文森特岛' },
-                  { value: 'Samoa Eastern', label: '东萨摩亚(美)' },
-                  { value: 'Samoa Western', label: '西萨摩亚' },
-                  { value: 'San Marino', label: '圣马力诺' },
-                  { value: 'Sao Tome and Principe', label: '圣多美和普林西比' },
-                  { value: 'Saudi Arabia', label: '沙特阿拉伯' },
-                  { value: 'Senegal', label: '塞内加尔' },
-                  { value: 'Seychelles', label: '塞舌尔' },
-                  { value: 'Sierra Leone', label: '塞拉利昂' },
-                  { value: 'Singapore', label: '新加坡' },
-                  { value: 'Slovakia', label: '斯洛伐克' },
-                  { value: 'Slovenia', label: '斯洛文尼亚' },
-                  { value: 'Solomon Is', label: '所罗门群岛' },
-                  { value: 'Somali', label: '索马里' },
-                  { value: 'South Africa', label: '南非' },
-                  { value: 'Spain', label: '西班牙' },
-                  { value: 'SriLanka', label: '斯里兰卡' },
-                  { value: 'St.Lucia', label: '圣卢西亚' },
-                  { value: 'St.Vincent', label: '圣文森特' },
-                  { value: 'Sudan', label: '苏丹' },
-                  { value: 'Suriname', label: '苏里南' },
-                  { value: 'Swaziland', label: '斯威士兰' },
-                  { value: 'Sweden', label: '瑞典' },
-                  { value: 'Switzerland', label: '瑞士' },
-                  { value: 'Syria', label: '叙利亚' },
-                  { value: 'Tajikstan', label: '塔吉克斯坦' },
-                  { value: 'Tanzania', label: '坦桑尼亚' },
-                  { value: 'Thailand', label: '泰国' },
-                  { value: 'Togo', label: '多哥' },
-                  { value: 'Tonga', label: '汤加' },
-                  { value: 'Trinidad and Tobago', label: '特立尼达和多巴哥' },
-                  { value: 'Tunisia', label: '突尼斯' },
-                  { value: 'Turkey', label: '土耳其' },
-                  { value: 'Turkmenistan', label: '土库曼斯坦' },
-                  { value: 'Uganda', label: '乌干达' },
-                  { value: 'Ukraine', label: '乌克兰' },
-                  { value: 'United Arab Emirates', label: '阿拉伯联合酋长国' },
-                  { value: 'United Kiongdom', label: '英国' },
-                  { value: 'United States of America', label: '美国' },
-                  { value: 'Uruguay', label: '乌拉圭' },
-                  { value: 'Uzbekistan', label: '乌兹别克斯坦' },
-                  { value: 'Venezuela', label: '委内瑞拉' },
-                  { value: 'Vietnam', label: '越南' },
-                  { value: 'Yemen', label: '也门' },
-                  { value: 'Yugoslavia', label: '南斯拉夫' },
-                  { value: 'Zimbabwe', label: '津巴布韦' },
-                  { value: 'Zaire', label: '扎伊尔' },
-                  { value: 'Zambia', label: '赞比亚' }
-                ]
-              }],
-            personSource: [
-              { value: "1", label: '集中留观' },
-              { value: "2", label: '密切接触者' },
-              { value: "3", label: '交通检疫' },
-              { value: "4", label: '社区排查' },
-              { value: "5", label: '发热门诊' },
-              { value: "6", label: '其他门(急)诊' },
-              { value: "7", label: '住院患者' },
-              { value: "8", label: '住院患者陪护人员' },
-              { value: "9", label: '农贸市场专项排查' },
-              { value: "99", label: '其他采样点' },
-            ],//人员来源
-            options: [
-              { value: '0', label: '居民身份证' },
-              { value: '1', label: '护照' },
-              { value: '2', label: '港澳居民来往内地通行证（俗称回乡证）' },
-              { value: '3', label: '台湾居民来往内地通行证（俗称台胞证）' },
-              { value: '4', label: '出生医学证明' },
-              { value: '5', label: '其他' }
-            ],//证件类型
-            personnelIdentity: [//人员身份
-              {
-                type: '0',
-                options: [
-                  { value: '1', label: '出入境通关人员' },
-                  { value: '2', label: '国内出行人员' },
-                  { value: '3', label: '上岗就业人员' },
-                  { value: '4', label: '返校复课师生' },
-                  { value: '5', label: '医疗机构工作人员' },
-                  { value: '6', label: '口岸检疫和边防检查人员' },
-                  { value: '7', label: '监所工作人员' },
-                  { value: '8', label: '社会福利养老机构工作人员' },
-                  { value: '9', label: '孕产妇' },
-                  { value: '10', label: '新生儿' },
-                  { value: '11', label: '母婴服务类机构人员' },
-                  { value: '99', label: '其他人群' },
-                ]
-              },
-              {
-                type: '1',
-                options: [
-                  { value: '12', label: '农贸市场海水产品从业人员' },
-                  { value: '13', label: '农贸市场禽畜肉类从业人员' },
-                  { value: '14', label: '农贸市场进口食品类从业人员' },
-                  { value: '15', label: '农贸市场其他人员' },
-                  { value: '16', label: '农贸市场专项排查其他从业人员' },
-                  { value: '17', label: '屠宰场/各类冷库从业人员' },
-                  { value: '18', label: '农贸市场中地下活通风不良场所从业人员' },
-                ]
-              },
-            ],//人员身份
-            insureType: [
-              { value: '0', label: '本市' },
-              { value: '1', label: '省内异地' },
-              { value: '2', label: '非参保人' },
-              { value: '3', label: '省外' },
-              { value: '4', label: '无法核实' },
-            ],
-            insuranceTypes: [
-              { value: '0', label: '职工医保' },
-              { value: '1', label: '居民医保' },
-              { value: '2', label: '省直医保' },
-              { value: '3', label: '本市公费医疗' },
-              { value: '4', label: '其他' },
-            ],//险种
-            specimenType: [
-              { value: '0', label: '鼻拭子' },
-              { value: '1', label: '咽拭子' },
-              { value: '2', label: '肛拭子' },
-              { value: '3', label: '血液' },
-              { value: '4', label: '痰液' },
-              { value: '5', label: '肺泡灌洗液' },
-              { value: '6', label: '粪便' },
-            ],//标本类型
-            testItem: [
-              { value: '0', label: '核酸检测' },
-              { value: '1', label: 'IgG抗体检测' },
-            ],//检测项目
-            settlementType: [
-              { value: '0', label: '自费' },
-              { value: '1', label: '医保' },
-              { value: '2', label: '免费' },
-            ],//结算类型
-            checkoutResult: [
-              { value: '0', label: '阴性' },
-              { value: '1', label: '阳性' },
-              { value: '2', label: '已退单' },
-            ],//检测结果
+            <iframe style="float: right;" frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="https://music.163.com/outchain/player?type=2&id=1401710442&auto=1&height=66"></iframe>
+        </div>
+    
+    <script>
+    </script>
 
-          }
-        },
-        created() {
+    <script>
+    (function(){
+        var canvas = $('#canvas');
 
-        },
-        mounted() {
-          document.getElementsByClassName("app")[0].style.display = "block";
-        },
-        methods: {
-          submitForm(form) {
-            this.$refs[form].validate((valid) => {
-              if (valid) {
-                const loading = this.$loading({
-                  lock: true,
-                  text: '提交中,请等候',
-                  background: 'rgba(0, 0, 0, 0.7)'
-                });
-                axios.post( BASE_API + '/rnaTesting/rna-testing-add', {...this.form}).then((res)=>{
-                  console.log(res)
-                  if (res.data.code == 200) {
-                    loading.close();
-                    this.$notify({
-                      title: '提交成功',
-                      message: '感谢您的提交',
-                      type: 'success'
-                    });
-                    this.$refs[form].resetFields();
-                  } else {
-                    loading.close();
-                    this.$message.error(res.data.msg || "提交失败");
-                  }
-                }).catch((err)=>{
-                  loading.close();
-                  this.$message.error(err.data.msg || "提交异常");
-                });
-              } else {
-                return false;
-              }
-            })
-          },
-          commonChoose(property,value) {
-            this.$set(this.form, property, value)
-          },
+        if (!canvas[0].getContext) {
+            $("#error").show();
+            return false;
         }
 
-      })
+        var width = canvas.width();
+        var height = canvas.height();
+        
+        canvas.attr("width", width);
+        canvas.attr("height", height);
+
+        var opts = {
+            seed: {
+                x: width / 2 - 20,
+                color: "rgb(190, 26, 37)",
+                scale: 2
+            },
+            branch: [
+                [535, 680, 570, 250, 500, 200, 30, 100, [
+                    [540, 500, 455, 417, 340, 400, 13, 100, [
+                        [450, 435, 434, 430, 394, 395, 2, 40]
+                    ]],
+                    [550, 445, 600, 356, 680, 345, 12, 100, [
+                        [578, 400, 648, 409, 661, 426, 3, 80]
+                    ]],
+                    [539, 281, 537, 248, 534, 217, 3, 40],
+                    [546, 397, 413, 247, 328, 244, 9, 80, [
+                        [427, 286, 383, 253, 371, 205, 2, 40],
+                        [498, 345, 435, 315, 395, 330, 4, 60]
+                    ]],
+                    [546, 357, 608, 252, 678, 221, 6, 100, [
+                        [590, 293, 646, 277, 648, 271, 2, 80]
+                    ]]
+                ]] 
+            ],
+            bloom: {
+                num: 700,
+                width: 1080,
+                height: 650,
+            },
+            footer: {
+                width: 1200,
+                height: 5,
+                speed: 10,
+            }
+        }
+
+        var tree = new Tree(canvas[0], width, height, opts);
+        var seed = tree.seed;
+        var foot = tree.footer;
+        var hold = 1;
+
+        canvas.click(function(e) {
+            var offset = canvas.offset(), x, y;
+            x = e.pageX - offset.left;
+            y = e.pageY - offset.top;
+            if (seed.hover(x, y)) {
+                hold = 0; 
+                canvas.unbind("click");
+                canvas.unbind("mousemove");
+                canvas.removeClass('hand');
+            }
+        }).mousemove(function(e){
+            var offset = canvas.offset(), x, y;
+            x = e.pageX - offset.left;
+            y = e.pageY - offset.top;
+            canvas.toggleClass('hand', seed.hover(x, y));
+        });
+
+        var seedAnimate = eval(Jscex.compile("async", function () {
+            seed.draw();
+            while (hold) {
+                $await(Jscex.Async.sleep(10));
+            }
+            while (seed.canScale()) {
+                seed.scale(0.95);
+                $await(Jscex.Async.sleep(10));
+            }
+            while (seed.canMove()) {
+                seed.move(0, 2);
+                foot.draw();
+                $await(Jscex.Async.sleep(10));
+            }
+        }));
+
+        var growAnimate = eval(Jscex.compile("async", function () {
+            do {
+                tree.grow();
+                $await(Jscex.Async.sleep(10));
+            } while (tree.canGrow());
+        }));
+
+        var flowAnimate = eval(Jscex.compile("async", function () {
+            do {
+                tree.flower(2);
+                $await(Jscex.Async.sleep(10));
+            } while (tree.canFlower());
+        }));
+
+        var moveAnimate = eval(Jscex.compile("async", function () {
+            tree.snapshot("p1", 240, 0, 610, 680);
+            while (tree.move("p1", 500, 0)) {
+                foot.draw();
+                $await(Jscex.Async.sleep(10));
+            }
+            foot.draw();
+            tree.snapshot("p2", 500, 0, 610, 680);
+
+            // 会有闪烁不得意这样做, (＞﹏＜)
+            canvas.parent().css("background", "url(" + tree.toDataURL('image/png') + ")");
+            canvas.css("background", "#ffe");
+            $await(Jscex.Async.sleep(300));
+            canvas.css("background", "none");
+        }));
+
+        var jumpAnimate = eval(Jscex.compile("async", function () {
+            var ctx = tree.ctx;
+            while (true) {
+                tree.ctx.clearRect(0, 0, width, height);
+                tree.jump();
+                foot.draw();
+                $await(Jscex.Async.sleep(25));
+            }
+        }));
+
+        var textAnimate = eval(Jscex.compile("async", function () {
+            var together = new Date();
+            together.setFullYear(2022, 6, 25);
+            together.setHours(13);
+            together.setMinutes(14);
+            together.setSeconds(0);
+            together.setMilliseconds(0);
+
+            $("#code").show().typewriter();
+            $("#clock-box").fadeIn(500);
+            while (true) {
+                timeElapse(together);
+                $await(Jscex.Async.sleep(1000));
+            }
+        }));
+
+        var runAsync = eval(Jscex.compile("async", function () {
+            $await(seedAnimate());
+            $await(growAnimate());
+            $await(flowAnimate());
+            $await(moveAnimate());
+
+            textAnimate().start();
+
+            $await(jumpAnimate());
+        }));
+
+        runAsync().start();
+    })();
     </script>
-  </body>
-</html>
+
+
+
+</body></html>
